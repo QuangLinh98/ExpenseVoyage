@@ -1,0 +1,54 @@
+@model IEnumerable<Photos>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@*  <partial name="_Notification" /> *@
+<div class="row">
+    <h2>Photos List</h2>
+    <a asp-action="Create" class="btn btn-primary">Create a new</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>PhotoId</th>
+                <th>DestinationId</th>
+                <th>Caption</th>
+                <th>Name</th>
+
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PhotoId</td>
+                    <td>@item.DestinationId</td>
+                    <td>@item.Caption</td>
+                    <td>@item.DestinationName</td>
+                    <td>
+                        @if (item.PhotosImages != null && item.PhotosImages.Count > 0)
+                        {
+                            foreach (var image in item.PhotosImages)
+                            {
+                                <img src="~/Uploads/@image.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+                            }
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.PhotoId"
+                           class="btn btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.PhotoId"
+                           class="btn btn-warning">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

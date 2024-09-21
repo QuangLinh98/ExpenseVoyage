@@ -1,0 +1,98 @@
+﻿@model ExpenseVoyage.Viewmodels.HomeViewModel
+
+
+<div class="untree_co-section">
+	<div class="container">
+		<div class="row mb-5 justify-content-center">
+			<div class="col-lg-6 text-center">
+				<h2 class="section-title text-center mb-3">Tour</h2>
+				<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+			</div>
+		</div>
+
+
+		@foreach (var item in Model.ExpenseTourList)
+		{
+			<div class="row align-items-stretch">
+				<div class="col-lg-7">
+					<div class="owl-single dots-absolute owl-carousel">
+						@if (item.TourImages != null && item.TourImages.Count > 0)
+						{
+							var firstImage = item.TourImages.FirstOrDefault();  // Lấy hình ảnh đầu tiên
+							if (firstImage != null)
+							{
+
+								<img src="~/Uploads/@firstImage.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+
+							}
+						}
+
+					</div>
+				</div>
+				@* <div class="col-lg-4 order-lg-1">
+					<div class="h-100">
+						<div class="frame h-100">
+							<div class="feature-img-bg h-100">
+								@if (item.TourImages != null && item.TourImages.Count > 0)
+								{
+									var firstImage = item.TourImages.FirstOrDefault();  // Lấy hình ảnh đầu tiên
+									if (firstImage != null)
+									{
+										
+									<img src="~/Uploads/@firstImage.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+
+									}
+								}
+							</div>
+						</div>
+					</div>
+				</div> *@
+
+				<div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+
+					<div class="feature-1 d-md-flex">
+						<div class="align-self-center">
+							<span class="flaticon-house display-4 text-primary"></span>
+							<h3>@item.ExpenseTourName</h3>
+							<p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+						</div>
+					</div>
+
+					<div class="feature-1 ">
+						<div class="align-self-center">
+							<span class="flaticon-restaurant display-4 text-primary"></span>
+							<h3>@item.Derparture</h3>
+							<p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
+
+					<div class="feature-1 d-md-flex">
+						<div class="align-self-center">
+							<span class="flaticon-mail display-4 text-primary"></span>
+							<h3>@item.Category</h3>
+							<p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+						</div>
+					</div>
+
+					<div class="feature-1 d-md-flex">
+						<div class="align-self-center">
+							<span class="flaticon-phone-call display-4 text-primary"></span>
+							<h3>@item.Cost</h3>
+							<p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+			<br />
+		}
+
+
+	</div>
+</div>

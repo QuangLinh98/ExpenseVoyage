@@ -1,0 +1,190 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+	@model ExpenseVoyage.Viewmodels.HomeViewModel
+
+
+<div class="untree_co-section">
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row text-center justify-content-center mb-5">
+                <div class="col-lg-7">
+                    <h2 class="section-title text-center">Popular Gallery</h2>
+                </div>
+            </div>
+            <div class="owl-carousel owl-3-slider">
+
+
+                @foreach (var image in Model.PhotosImages)
+                {
+                    <div class="item">
+                        <a class="media-thumb" href="@image.ImageUrl" data-fancybox="gallery">
+                            <div class="media-text">
+                                <h3>@image.Photos?.Caption</h3> <!-- Hiển thị tên địa điểm -->
+                                <span class="location">@image.Photos?.DestinationName</span> <!-- Hiển thị vị trí -->
+                            </div>
+                            <a asp-action="Index" asp-controller="Gallery">   <img src="~/Uploads/@image.ImageUrl" alt="Image" class="img-fluid" width="100" class="img-thumbnail" style="margin-right:10px;" /> </a>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="path/to/owl.carousel.css">
+    <script src="path/to/jquery.min.js"></script>
+    <script src="path/to/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.owl-3-slider').owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 10,
+                nav: true,
+                dots: false
+            });
+        });
+    </script>
+
+
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-6">
+                    <h2 class="section-title text-center mb-3">Popular Destination</h2>
+                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+                </div>
+            </div>
+            <div class="owl-carousel owl-3-slider">
+                @foreach (var image in Model.DestinationImages)
+                {
+                    <div class="item">
+                        <div class="media-1">
+                            <a class="media-thumb" href="@Url.Action("Details", "Home", new { id = image.Id })">
+                                <img src="~/Uploads/@image.ImageUrl" alt="Image" class="img-fluid">
+                            </a>
+                            <span class="d-flex align-items-center loc mb-2">
+                                <span class="icon-room mr-3"></span>
+                                <span>@image.Destinations?.Name</span>
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="path/to/owl.carousel.css">
+    <script src="path/to/jquery.min.js"></script>
+    <script src="path/to/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.owl-carousel').owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 10,
+                nav: true,
+                dots: false
+            });
+        });
+    </script>
+    <div class="row mb-5 justify-content-center">
+        <div class="col-lg-6 text-center">
+            <h2 class="section-title text-center mb-3">Tour</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+        </div>
+    </div>
+
+
+    <div class="untree_co-section">
+        <div class="container">
+
+            @foreach (var item in Model.ExpenseTourList)
+            {
+                <div class="row align-items-stretch">
+                    <div class="col-lg-4 order-lg-1">
+                        <div class="h-100">
+                            <div class="frame h-100">
+                                <div class="feature-img-bg h-100">
+                                    @if (item.TourImages != null && item.TourImages.Count > 0)
+                                    {
+                                        var firstImage = item.TourImages.FirstOrDefault();  // Lấy hình ảnh đầu tiên
+                                        if (firstImage != null)
+                                        {
+                                            <a href="@Url.Action("DetailsTour", "Home", new { id = item.TourID })">
+                                                <img src="~/Uploads/@firstImage.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+                                            </a>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+
+                        <div class="feature-1 d-md-flex">
+                            <div class="align-self-center">
+                                <i class="bi bi-geo-alt display-4 text-primary"></i>  <!-- Icon vị trí -->
+                                <h3>@item.ExpenseTourName</h3>
+                                <p class="mb-0">@item.Category</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-1 ">
+                            <div class="align-self-center">
+                                <span class="fas fa-file-alt display-4 text-primary"></span>  <!-- Icon mô tả -->
+                                <h3>@item.Derparture</h3>
+                                <p class="mb-0">@item.Destination</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
+
+                        <div class="feature-1 d-md-flex">
+                            <div class="align-self-center">
+                                <h3>
+                                    <span class="fas fa-dollar-sign display-4 text-primary"></span>  <!-- Icon chi phí -->
+                                </h3>
+                                <p class="mb-0">@item.Cost</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-1 d-md-flex">
+                            <div class="align-self-center">
+                                <span class="fas fa-calendar-alt display-4 text-primary"></span>  <!-- Icon ngày tháng -->
+                                <h3>@item.Day</h3>
+                                <p class="mb-0">@item.Date</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+            }
+
+
+        </div>
+    </div>
+    <style>
+        .feature-img-bg img {
+            width: 100%; /* Đảm bảo ảnh chiếm hết chiều ngang của cột */
+            height: auto; /* Để hình ảnh giữ nguyên tỉ lệ */
+            max-height: 600px; /* Điều chỉnh chiều cao tối đa của ảnh theo kích thước mong muốn */
+            object-fit: cover; /* Đảm bảo ảnh vừa vặn với khung chứa mà không bị méo */
+        }
+    </style>
+
+
+
+
+
+</div>
+
+
+

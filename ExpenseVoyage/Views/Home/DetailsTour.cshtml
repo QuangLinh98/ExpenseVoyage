@@ -1,0 +1,36 @@
+﻿@model ExpenseVoyage.Viewmodels.HomeViewModel
+
+<div class="untree_co-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="owl-single dots-absolute owl-carousel">
+                    @foreach (var item in Model.ExpenseTours.TourImages)
+                    {
+                        var image = item.ExpenseTours.TourImages.FirstOrDefault();
+                        if (image != null)
+                        {
+                            <img src="~/Uploads/@image.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+                        }
+                    }
+                </div>
+            </div>
+            @foreach (var item in Model.ExpenseTourList)
+            {
+                <div class="col-lg-5 pl-lg-5 ml-auto">
+                    <h2 class="section-title mb-4">@item.ExpenseTourName</h2>
+                    <p>@item.Destination</p> <!-- Hiển thị mô tả đúng cho mỗi tour -->
+                    <ul class="list-unstyled two-col clearfix">
+                        <li>@item.Day</li>
+                        <li>@item.Date.ToString("dd/MM/yyyy")</li>
+                        <li>@item.Category</li>
+                        <li>@item.Derparture</li> <!-- Có thể có lỗi chính tả ở đây -->
+                        <li>@item.Destination</li>
+                        <li>@item.Cost</li>
+                    </ul>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

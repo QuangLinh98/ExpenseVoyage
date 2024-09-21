@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ExpenseVoyage.Models.Users>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    var currentUserRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value; // Assuming role is stored in claims
+}
+
+<div class="row">
+	<h4 class="card-title">User List</h4>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th> ID </th>
+				<th> Name </th>
+				<th> Email</th>
+				<th> Phone</th>
+				<th> Address </th>
+				<th> Role </th>
+				<th> Actions </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr id="topicRow_@item.Email">
+					<td class="py-1">@item.UserId</td>
+					<td>@item.Username</td>
+					<td>@item.Email</td>
+					<td>@item.Phone</td>
+					<td>@item.Address</td>
+					
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+

@@ -1,0 +1,82 @@
+﻿@model ExpenseVoyage.ViewModels.EditUserViewModel
+@{
+	ViewData["Title"] = "Profile";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<div class="container">
+	@if (TempData["SuccessMessageProfile"] != null)
+	{
+		<div class="alert alert-success">@TempData["SuccessMessageProfile"]</div>
+	}
+	@if (TempData["ErrorMessageProfile"] != null)
+	{
+		<div class="alert alert-danger">@TempData["ErrorMessageProfile"]</div>
+	}
+	<div class="row mt-5 mb-5">
+		<div class="col-md-6 px-custom">
+			<div class="user-info">
+				<h2>Admin Information</h2>
+				<div class="profile-image">
+					@if (!string.IsNullOrEmpty(Model.ImagePath))
+					{
+						<img src="@Model.ImagePath" alt="Profile Image" class="img-fluid" style="max-width: 150px; height: auto;" />
+					}
+					else
+					{
+						<p>No image available.</p>
+					}
+				</div>
+				<p><strong>Name:</strong> @Model.Username</p>
+				<p><strong>Email:</strong> @Model.Email</p>
+				<p><strong>Address:</strong> @Model.Address</p>
+				<p><strong>Phone:</strong> @Model.Phone</p>
+			</div>
+		</div>
+		<div class="col-md-6 px-custom">
+			<h2>Edit Admin Information</h2>
+			<form asp-action="Profile" asp-controller="Admin" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<label asp-for="Username"></label>
+					<input asp-for="Username" class="form-control" />
+					<span asp-validation-for="Username" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<input type="hidden" asp-for="Email" class="form-control" />
+					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="Address"></label>
+					<input asp-for="Address" class="form-control" />
+					<span asp-validation-for="Address" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="Phone"></label>
+					<input asp-for="Phone" class="form-control" />
+					<span asp-validation-for="Phone" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="ImageFile"></label>
+					<input type="file" asp-for="ImageFile" class="form-control-file" />
+					<span asp-validation-for="ImageFile" class="text-danger"></span>
+				</div>
+
+				@if (!string.IsNullOrEmpty(Model.ImagePath))
+				{
+					<div class="form-group">
+						<img src="@Model.ImagePath" alt="Profile Image" class="img-thumbnail" width="150" />
+					</div>
+				}
+
+
+				<button type="submit" class="btn btn-primary">Save Changes</button>
+			</form>
+		</div>
+
+	</div>
+</div>

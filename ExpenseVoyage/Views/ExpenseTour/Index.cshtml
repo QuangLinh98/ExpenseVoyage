@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ExpenseTour>
+
+@{
+    ViewData["Title"] = "Expense Tour List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="mb-4">Expense Tour List</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">
+    <i class="fas fa-plus"></i> Create New
+</a>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Expense Tour ID</th>
+                    <th>Tour ID</th>
+                    <th>Day</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Departure</th>
+                    <th>Destination</th>
+                    <th>Cost</th>
+                    
+                    <th>Name</th>
+
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ExpenseTourId</td>
+                        <td>@item.TourID</td>
+                        <td>@item.Day</td>
+                        <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Category</td>
+                        <td>@item.Derparture</td>
+                        <td style="white-space: normal; width: 200px;">@item.Destination</td>
+                        <td>@item.Cost</td>
+                        <td>@item.ExpenseTourName</td>
+                        <td>
+                            @if (item.TourImages != null && item.TourImages.Count > 0)
+                            {
+                                foreach (var image in item.TourImages)
+                                {
+                                    <img src="~/Uploads/@image.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+                                }
+                            }
+                            else
+                            {
+                                <span>No Image</span>
+                            }
+                        </td>
+
+
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.ExpenseTourId"
+                               class="btn btn-danger">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.ExpenseTourId"
+                               class="btn btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿@model Photos
+
+@{
+    ViewData["Title"] = "Edit Photos";
+
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<h2>Edit Photos</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="PhotoId" class="control-label"></label>
+        <input asp-for="PhotoId" class="form-control" readonly/>
+    </div>
+    <div class="form-group">
+        <label asp-for="DestinationId" class="control-label"></label>
+        <input asp-for="DestinationId" class="form-control" readonly/>
+    </div>
+    <div class="form-row mb-3">
+        <div class="form-group col-md-6">
+            <label asp-for="DestinationName" class="font-weight-bold"></label>
+            <input asp-for="DestinationName" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Caption" class="control-label"></label>
+        <input asp-for="Caption" class="form-control" />
+        <span asp-validation-for="Caption" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="formFiles" class="control-label">Upload Images</label>
+        <input type="file" id="formFiles" name="formFiles" multiple class="form-control" />
+        <small class="form-text text-muted">You can select multiple images.</small>
+    </div>
+
+    <div class="form-group">
+        <label>Current Images:</label>
+        <div class="row">
+            @foreach (var image in Model.PhotosImages)
+            {
+                <div class="col-md-3">
+                    <input type="checkbox" name="selectedImageIds" value="@image.Id" />
+                    <img src="~/Uploads/@image.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Edit" class="btn btn-primary" />
+    </div>
+</form>
+
+
+

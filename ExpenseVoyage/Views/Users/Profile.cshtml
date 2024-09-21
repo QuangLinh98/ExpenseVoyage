@@ -1,0 +1,84 @@
+﻿
+@model ExpenseVoyage.Viewmodels.HomeViewModel
+
+@{
+	ViewData["Title"] = "Profile";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="container">
+	@if (TempData["SuccessMessageProfile"] != null)
+	{
+		<div class="alert alert-success">@TempData["SuccessMessageProfile"]</div>
+	}
+	@if (TempData["ErrorMessageProfile"] != null)
+	{
+		<div class="alert alert-danger">@TempData["ErrorMessageProfile"]</div>
+	}
+	<div class="row mt-5 mb-5">
+		<div class="col-md-6 px-custom">
+			<div class="user-info">
+				<h2>User Information</h2>
+				<div class="profile-image">
+					@if (!string.IsNullOrEmpty(Model.EditUserViewModels.ImagePath))
+					{
+						<img src="~/Uploads/@Model.EditUserViewModels.ImagePath" alt="Profile Image" class="img-fluid" style="max-width: 150px; height: auto;" />
+					}
+					else
+					{
+						<p>No image available.</p>
+					}
+				</div>
+				<p><strong>Name:</strong> @Model.EditUserViewModels.Username</p>
+				<p><strong>Email:</strong> @Model.EditUserViewModels.Email</p>
+				<p><strong>Address:</strong> @Model.EditUserViewModels.Address</p>
+				<p><strong>Phone:</strong> @Model.EditUserViewModels.Phone</p>
+			</div>
+		</div>
+		<div class="col-md-6 px-custom">
+			<h2>Edit User Information</h2>
+			<form asp-action="Profile" asp-controller="Users" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<label asp-for="EditUserViewModels.Username"></label>
+					<input asp-for="EditUserViewModels.Username" class="form-control" />
+					<span asp-validation-for="EditUserViewModels.Username" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<input type="hidden" asp-for="EditUserViewModels.Email" class="form-control" />
+					<span asp-validation-for="EditUserViewModels.Email" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="EditUserViewModels.Address"></label>
+					<input asp-for="EditUserViewModels.Address" class="form-control" />
+					<span asp-validation-for="EditUserViewModels.Address" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="EditUserViewModels.Phone"></label>
+					<input asp-for="EditUserViewModels.Phone" class="form-control" />
+					<span asp-validation-for="EditUserViewModels.Phone" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="EditUserViewModels.ImageFile"></label>
+					<input type="file" asp-for="EditUserViewModels.ImageFile" class="form-control-file" />
+					<span asp-validation-for="EditUserViewModels.ImageFile" class="text-danger"></span>
+				</div>
+
+				@if (!string.IsNullOrEmpty(Model.EditUserViewModels.ImagePath))
+				{
+					<div class="form-group">
+						<img src="~/Uploads/@Model.EditUserViewModels.ImagePath" alt="Profile Image" class="img-thumbnail" width="150" />
+					</div>
+				}
+
+
+				<button type="submit" class="btn btn-primary">Save Changes</button>
+			</form>
+		</div>
+
+	</div>
+</div>

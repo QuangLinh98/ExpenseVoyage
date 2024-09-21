@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model ExpenseVoyage.Viewmodels.HomeViewModel
+
+<div class="container">
+    <h2>Currency Converter</h2>
+
+    <!-- Hiển thị thông báo lỗi nếu có -->
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+
+    <!-- Form nhập số tiền và chọn loại tiền tệ -->
+    <form id="currencyConverterForm">
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount:</label>
+            <input type="number" class="form-control" id="amount" name="amount" required pattern="^[1-9]\d*$" />
+        </div>
+
+        <div class="mb-3">
+            <label for="fromCurrencyCode" class="form-label">From Currency:</label>
+            <select id="fromCurrencyCode" class="form-control" name="fromCurrencyCode">
+                @foreach (var currency in Model.Currencies)
+                {
+                    <option value="@currency.CurrencyCode">@currency.CurrencyName (@currency.CurrencyCode)</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="toCurrencyCode" class="form-label">To Currency:</label>
+            <select id="toCurrencyCode" class="form-control" name="toCurrencyCode">
+                @foreach (var currency in Model.Currencies)
+                {
+                    <option value="@currency.CurrencyCode">@currency.CurrencyName (@currency.CurrencyCode)</option>
+                }
+            </select>
+        </div>
+
+        <button type="button" id="convertButton" class="btn btn-primary">Convert</button>
+    </form>
+
+    <div id="conversionResult" class="mt-4"></div>
+</div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#convertButton').click(function () {
+                var amount = $('#amount').val();
+                var fromCurrency = $('#fromCurrencyCode').val();
+                var toCurrency = $('#toCurrencyCode').val();
+
+                $.ajax({
+                    url: '@Url.Action("ConvertCurrency", "Currencies")',
+                    type: 'POST',
+                    data: {
+                        amount: amount,
+                        fromCurrencyCode: fromCurrency,
+                        toCurrencyCode: toCurrency
+                    },
+                    success: function (data) {
+                        $('#conversionResult').html(data);
+                    },
+                    error: function () {
+                        $('#conversionResult').html('<div class="alert alert-danger">An error occurred.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+}
+

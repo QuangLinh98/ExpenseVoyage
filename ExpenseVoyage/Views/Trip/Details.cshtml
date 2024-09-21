@@ -1,0 +1,125 @@
+﻿@model ExpenseVoyage.Models.Trips
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2>Trip Details</h2>
+
+<div>
+    @* Gọi Partial View _TripInformation *@
+    @await Html.PartialAsync("_TripInformation", Model)
+</div>
+<div>
+    <a asp-controller="Trip" asp-action="Update" asp-route-id="@Model.TripId" class="btn btn-primary">Edit Trip</a>
+    <a asp-controller="Trip" asp-action="CreateItinerary" asp-route-id="@Model.TripId" class="btn btn-success">
+        Create
+        Itineraries
+    </a>
+</div>
+<hr />
+
+<div>
+    <h3>Itineraries</h3>
+
+    <table id="itineraryTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Type</th>
+                <th>Departure</th>
+                <th>Destination</th>
+                <th>Date</th>
+                <th>Cost</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Itineraries != null && Model.Itineraries.Any())
+            {
+                foreach (var itinerary in Model.Itineraries)
+                {
+                    <tr>
+                        <td>@itinerary.Day</td>
+                        <td>@itinerary.Type</td>
+                        <td>@itinerary.Departure</td>
+                        <td>@itinerary.Destination</td>
+                        <td>@itinerary.Date.ToShortDateString()</td>
+                        <td>@itinerary.Cost.ToString("C")</td>
+                        <td>
+                            <a asp-controller="Trip" asp-action="DeleteItinerary" asp-route-id="@itinerary.ItineraryId"
+                               class="btn btn-danger"
+                               onclick="return confirm('Are you sure you want to delete the itinerary for day: @itinerary.Day?');">Remove</a>
+                            <br>
+                            <a asp-controller="Trip" asp-action="CreateExpense" asp-route-id="@itinerary.ItineraryId"
+                               class="btn btn-primary">Add Expense</a>
+                        </td>
+                    </tr>
+
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">No itineraries found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<div>
+    <h3>Expenses</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Note</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Itineraries != null && Model.Itineraries.Any())
+            {
+                var expenses = Model.Itineraries.SelectMany(i => i.Expenses);
+                if (expenses.Any())
+                {
+                    foreach (var expense in expenses)
+                    {
+                        <tr>
+                            <td>@expense.Category</td>
+                            <td>@expense.Amount.ToString("C")</td>
+                            <td>@expense.Date.ToShortDateString()</td>
+                            <td>@expense.Note</td>
+                            <td>@expense.Description</td>
+                            <td>
+                                <a asp-controller="Trip" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId"
+                                   class="btn btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete this expenses?');">Remove</a>
+                                <br>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No expenses found.</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">No itineraries found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

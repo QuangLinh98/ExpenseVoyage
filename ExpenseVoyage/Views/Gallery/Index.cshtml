@@ -1,0 +1,26 @@
+﻿@model ExpenseVoyage.Viewmodels.HomeViewModel
+<div class="untree_co-section">
+    <div class="container">
+        @foreach (var item in Model.Photos)
+        {
+            @if (item.PhotosImages != null && item.PhotosImages.Count > 0)
+            {
+                <p>@item.DestinationName</p>
+
+                <div class="row">
+                    @foreach (var image in item.PhotosImages)
+                    {
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="media-1">
+                                <!-- When clicking the image, open modal to show larger image -->
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImageInModal('@image.ImageUrl')">
+                                    <img src="~/Uploads/@image.ImageUrl" alt="Image" class="img-thumbnail img-fluid" style="width:100%;" />
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>

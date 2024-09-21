@@ -1,0 +1,49 @@
+﻿@model ExpenseVoyage.Models.Trips
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<form asp-controller="Trip" asp-action="Create">
+
+    <h3>Create a trip</h3>
+    <div class="mb-3 mt-3">
+        <label for="User">User</label>
+        <select asp-for="UserId" asp-items="@ViewBag.Users" class="form-control">
+            <option value="">Select a user</option>
+        </select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="Departure">Departure</label>
+        <select asp-for="Departure" asp-items="@ViewBag.Destination" class="form-control">
+            <option value="">Select departure</option>
+        </select>
+        <span asp-validation-for="Departure" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <label for="Destination">Destination</label>
+        <select asp-for="Destination" asp-items="@ViewBag.Destination" class="form-control">
+            <option value="">Select Destination</option>
+        </select>
+        <span asp-validation-for="Destination" class="text-danger"></span>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="startDate">StartDate:</label>
+        <input type="date" class="form-control" asp-for="StartDate">
+        <span asp-validation-for="StartDate" , class="text-danger"> </span>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="endDate">EndDate:</label>
+        <input type="date" class="form-control" asp-for="EndDate">
+        <span asp-validation-for="EndDate" , class="text-danger"> </span>
+    </div>
+    <div class="mb-3 mt-3">
+        <label for="startDate">TotalBudget:</label>
+        <input type="number" class="form-control" asp-for="TotalBudget">
+        <span asp-validation-for="TotalBudget" , class="text-danger"> </span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

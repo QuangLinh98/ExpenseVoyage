@@ -1,0 +1,49 @@
+﻿@model Destinations
+
+@{
+    ViewData["Title"] = "Edit Destination";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Edit Destination</h2>
+
+<form asp-action="Edit" asp-controller="Destinations" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="DestinationId" class="control-label"></label>
+        <input asp-for="DestinationId" class="form-control" readonly/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="formFiles">Upload Images:</label>
+        <input type="file" id="formFiles" name="formFiles" multiple />
+    </div>
+
+    <div class="form-group">
+        <label>Current Images:</label>
+        <div class="row">
+            @foreach (var image in Model.DestinationImages)
+            {
+                <div class="col-md-3">
+                    <input type="checkbox" name="selectedImageIds" value="@image.Id" />
+                    <img src="~/Uploads/@image.ImageUrl" width="100" class="img-thumbnail" style="margin-right:10px;" />
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>

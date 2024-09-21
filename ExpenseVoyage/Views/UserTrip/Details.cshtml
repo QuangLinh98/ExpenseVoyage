@@ -1,0 +1,147 @@
+﻿@model ExpenseVoyage.Models.Trips
+<div class="container">
+    <h3 class="text-center">Trip detials </h3>
+    <div class="row">
+        <div class="col-md-6">
+            @await Html.PartialAsync("_TripInformation", Model)
+            <div>
+				<button id="create-itinerary-button" class="btn btn-success
+" data-trip-id="@Model.TripId">
+					Create Itineraries
+				</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="create-itinerary-form" style="display:none;">
+                @* Place your form markup here *@
+                <form asp-action="SaveItnExpenses" method="post">
+                    <input type="hidden" name="TripId" value="@Model.TripId" />
+                    <!-- Other form fields go here -->
+                    <br>
+                    <button type="submit" class="btn btn-primary">Save Itineraries and Expenses</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div>
+        <hr />
+
+        <h3>Itineraries</h3>
+
+        <table id="itineraryTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Type</th>
+                    <th>Departure</th>
+                    <th>Destination</th>
+                    <th>Date</th>
+                    <th>Cost</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Itineraries != null && Model.Itineraries.Any())
+                {
+                    foreach (var itinerary in Model.Itineraries)
+                    {
+                        <tr>
+                            <td>@itinerary.Day</td>
+                            <td>@itinerary.Type</td>
+                            <td>@itinerary.Departure</td>
+                            <td>@itinerary.Destination</td>
+                            <td>@itinerary.Date.ToShortDateString()</td>
+                            <td>@itinerary.Cost.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</td>
+                            <td>
+                                <a asp-action="DeleteItinerary" asp-route-id="@itinerary.ItineraryId" class="btn btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete the itinerary for day: @itinerary.Day?');">Remove</a>
+                                <br>
+                                <a asp-controller="UserTrip" asp-action="CreateExpenses"
+                                   asp-route-id="@itinerary.ItineraryId"
+                                   class="btn btn-primary">+ Expense</a>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">No itineraries found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+    <div>
+        <h3>Expenses</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Note</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Itineraries != null && Model.Itineraries.Any())
+                {
+                    var expenses = Model.Itineraries.SelectMany(i => i.Expenses);
+                    if (expenses.Any())
+                    {
+                        foreach (var expense in expenses)
+                        {
+
+                            <tr>
+                                <td>@expense.Category</td>
+                                <td>@expense.Amount.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</td>
+                                <td>@expense.Date.ToShortDateString()</td>
+                                <td>@expense.Note</td>
+                                <td>@expense.Description</td>
+                                <td>
+                                    <a asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" class="btn btn-danger"
+                                       onclick="return confirm('Are you sure you want to delete this expenses?');">Remove</a>
+                                    <br>
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">No expenses found.</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No itineraries found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script>
+    document.getElementById('create-itinerary-button').addEventListener('click', async function () {
+        const tripId = this.getAttribute('data-trip-id');
+
+        // Fetch the form via AJAX
+        const response = await fetch(`/UserTrip/CreateItinerary/${tripId}`);
+        const formHtml = await response.text();
+
+        // Insert the form HTML into the designated area
+        document.getElementById('create-itinerary-form').innerHTML = formHtml;
+        document.getElementById('create-itinerary-form').style.display = 'block'; // Show the form
+    });
+</script>

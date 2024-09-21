@@ -1,0 +1,180 @@
+﻿@model ExpenseVoyage.Models.Trips
+
+<h3>Trip Information</h3>
+
+<!-- Display Mode (initial view) -->
+<dl class="row" id="tripInfoDisplay">
+    <dt class="col-sm-2">Departure</dt>
+    <dd class="col-sm-10">@Model.Departure</dd>
+
+    <dt class="col-sm-2">Destination</dt>
+    <dd class="col-sm-10">@Model.Destination</dd>
+
+    <dt class="col-sm-2">Start Date</dt>
+    <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-2">End Date</dt>
+    <dd class="col-sm-10">@Model.EndDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-2">Total Budget</dt>
+    <dd class="col-sm-10">@Model.TotalBudget.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</dd>
+
+    <dt class="col-sm-2">Itinerary Cost</dt>
+    <dd class="col-sm-10">@ViewBag.totalItineraryCost.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</dd>
+
+    <dt class="col-sm-2">Expense Cost</dt>
+    <dd class="col-sm-10">@ViewBag.totalExpenseCost.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</dd>
+
+    <dt class="col-sm-2">Remaining Budget</dt>
+    <dd class="col-sm-10">@ViewBag.RemainingBudget.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</dd>
+</dl>
+
+<!-- Edit Mode (hidden initially) -->
+<form method="post" action="/UserTrip/EditTrip" id="tripInfoEdit" style="display:none;">
+
+    <div class="form-group row">
+        <input type="hidden" name="TripId" value="@Model.TripId" />
+
+        <label class="col-sm-2 col-form-label">Departure</label>
+        <div class="col-sm-4">
+            <input type="text" name="Departure" class="form-control" value="@Model.Departure" />
+                    <span class="text-danger" id="departureError"></span>
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Destination</label>
+        <div class="col-sm-4">
+            <input type="text" name="Destination" class="form-control" value="@Model.Destination" />
+        </div>
+                            <span class="text-danger" id="destinationError"></span>
+
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Start Date</label>
+        <div class="col-sm-4">
+            <input type="date" name="StartDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                    <span class="text-danger" id="departureError"></span>
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">End Date</label>
+        <div class="col-sm-4">
+            <input type="date" name="EndDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                    <span class="text-danger" id="endDateError"></span>
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Total Budget</label>
+        <div class="col-sm-4">
+<input type="number" name="TotalBudget" class="form-control" value="@Model.TotalBudget" step="0.01" />
+                    <span class="text-danger" id="totalError"></span>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+</form>
+
+
+<!-- Edit Button -->
+<button type="button" class="btn btn-warning" id="editTripButton">Edit Trip</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('#tripInfoEdit').submit(function (event) {
+        var isValid = true;
+
+        // Xóa thông báo lỗi trước khi kiểm tra
+        $('.text-danger').text('');
+
+        // Lấy giá trị các trường
+        var startDate = new Date($('input[name="StartDate"]').val());
+        var endDate = new Date($('input[name="EndDate"]').val());
+        var departure = $('input[name="Departure"]').val();
+        var destination = $('input[name="Destination"]').val();
+        var totalBudget =$('input[name="TotalBudget"]').val();
+    
+        if (!departure) {
+            isValid = false;
+            $('#departureError').text("Departure can't be blank.");
+        }
+         if (!totalBudget) {
+            isValid = false;
+            $('#totalError').text("Total can't be blank .");
+        }
+        if (!destination) {
+            isValid = false;
+            $('#destinationError').text("Destination can't be blank.");
+        }
+        if (!$('input[name="StartDate"]').val()) {
+            isValid = false;
+            $('#startDateError').text("Start Date can't be blank.");
+        }
+        if (!$('input[name="EndDate"]').val()) {
+            isValid = false;
+            $('#endDateError').text("End Date can't be blank.");
+        }
+
+         // Kiểm tra Total Budget không âm
+        if (isNaN(totalBudget) || totalBudget < 0) {
+            isValid = false;
+            $('#totalError').text("Total Budget must be greater than 0.");
+            $('input[name="TotalBudget"]').addClass('is-invalid');
+        }
+        // Kiểm tra Start Date và End Date không được trong quá khứ
+        if (startDate < new Date()) {
+            isValid = false;
+            $('#departureError').text("Start date cant be in the past.");
+            $('input[name="StartDate"]').addClass('is-invalid');
+        }
+        if (endDate < new Date()) {
+            isValid = false;
+            $('#endDateError').text("End date cant be in the past.");
+            $('input[name="EndDate"]').addClass('is-invalid');
+        }
+
+        // Kiểm tra End Date lớn hơn Start Date
+        if (endDate <= startDate) {
+            isValid = false;
+            $('#endDateError').text("End date must be >  Start date.");
+            $('input[name="EndDate"]').addClass('is-invalid');
+        }
+        // Kiểm tra Departure và Destination không trùng nhau
+        if (departure.toLowerCase() === destination.toLowerCase()) {
+            isValid = false;
+            $('#departureError').text("Departure và Destination cant be duplicate.");
+            $('input[name="Departure"]').addClass('is-invalid');
+            $('input[name="Destination"]').addClass('is-invalid');
+        }
+
+        // Nếu không hợp lệ, ngăn chặn gửi form
+        if (!isValid) {
+            event.preventDefault(); // Ngăn chặn gửi form
+        }
+    });
+
+    // Khi nhấn nút chỉnh sửa, ẩn chế độ hiển thị và hiện chế độ chỉnh sửa
+    $('#editTripButton').click(function () {
+        $('#tripInfoDisplay').hide();  // Ẩn chế độ hiển thị
+        $('#tripInfoEdit').show();     // Hiện form chỉnh sửa
+        $('#editTripButton').hide();   // Ẩn nút chỉnh sửa
+    });
+
+    // Khi nhấn nút hủy, trở lại chế độ hiển thị
+    $('#cancelEdit').click(function () {
+        $('#tripInfoEdit').hide();     // Ẩn form chỉnh sửa
+        $('#tripInfoDisplay').show();  // Hiện chế độ hiển thị
+        $('#editTripButton').show();   // Hiện nút chỉnh sửa lại
+    });
+});
+
+</script>

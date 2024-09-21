@@ -1,0 +1,100 @@
+﻿@model ExpenseTour
+
+@{
+    ViewData["Title"] = "Create Expense Tour";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="mb-4">Create Expense Tour</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label asp-for="ExpenseTourId" class="font-weight-bold"></label>
+                    <input asp-for="ExpenseTourId" type="number" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="TourID" class="font-weight-bold"></label>
+                    <input asp-for="TourID" type="number" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="ExpenseTourName" class="font-weight-bold"></label>
+                    <input asp-for="ExpenseTourName" type="number" class="form-control" readonly />
+                </div>
+            </div>
+
+
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label asp-for="Day" class="font-weight-bold"></label>
+                    <input asp-for="Day" type="number" class="form-control" placeholder="Enter day" />
+                    <span asp-validation-for="Day" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="Date" class="font-weight-bold"></label>
+                    <input asp-for="Date" type="date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label asp-for="Category" class="font-weight-bold"></label>
+                    <input asp-for="Category" class="form-control" placeholder="Enter category" />
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="Derparture" class="font-weight-bold"></label>
+                    <input asp-for="Derparture" class="form-control" placeholder="Enter departure location" />
+                    <span asp-validation-for="Derparture" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label asp-for="Destination" class="font-weight-bold"></label>
+                    <input asp-for="Destination" class="form-control" placeholder="Enter destination" />
+                    <span asp-validation-for="Destination" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="Cost" class="font-weight-bold"></label>
+                    <input asp-for="Cost" type="number" class="form-control" placeholder="Enter cost" />
+                    <span asp-validation-for="Cost" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="formFiles" class="control-label">Upload Images</label>
+                <input type="file" id="formFiles" name="formFiles" multiple class="form-control" />
+                <small class="form-text text-muted">You can select multiple images.</small>
+            </div>
+            <div class="form-row mb-4">
+                <div class="col-md-12">
+                    <label class="font-weight-bold">Current Images</label>
+                    <div class="row border p-3">
+                        @foreach (var image in Model.TourImages)
+                        {
+                            <div class="col-md-3 text-center mb-3">
+                                <input type="checkbox" name="selectedImageIds" value="@image.Id" class="mr-2" />
+                                <img src="~/Uploads/@image.ImageUrl" width="100" class="img-thumbnail" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Create" class="btn btn-primary btn-lg" />
+                    <a asp-action="Index" class="btn btn-secondary btn-lg ml-3">Back to List</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

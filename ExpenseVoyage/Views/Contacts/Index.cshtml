@@ -1,0 +1,90 @@
+﻿@model Contacts;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class="untree_co-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+
+
+
+                <p>@TempData["Message"]</p>
+
+
+
+                <form asp-action="SendEmail" method="post">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea asp-for="Message" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Message" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+
+
+            </div>
+            <div class="col-lg-5 ml-auto">
+                <div class="quick-contact-item d-flex align-items-center mb-4">
+                    <span class="flaticon-house"></span>
+                    <address class="text">
+                        391A Nam Kỳ Khỡi Nghĩa
+                    </address>
+                </div>
+                <div class="quick-contact-item d-flex align-items-center mb-4">
+                    <span class="flaticon-phone-call"></span>
+                    <address class="text">
+                        +1 202 2020 200
+                    </address>
+                </div>
+                <div class="quick-contact-item d-flex align-items-center mb-4">
+                    <span class="flaticon-mail"></span>
+                    <address class="text">
+                        linhnqt1s2303008@fpt.edu.vn
+                    </address>
+                </div>
+            </div>
+
+            <div class="untree_co-section">
+                <div class="container">
+                    <div class="row justify-content-center text-center mb-5">
+                        <div class="col-lg-6">
+                            <h2 class="section-title text-center mb-3">Location Map</h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d907.0850522450942!2d106.68224950413995!3d10.79075796381919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529cfdaf8731f%3A0x1628c44dc1f38869!2zMzkxYSDEkC4gTmFtIEvhu7MgS2jhu59pIE5naMSpYSwgUGjGsOG7nW5nIFZUUywgUXXhuq1uIDMsIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1726824175843!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"></iframe>                </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

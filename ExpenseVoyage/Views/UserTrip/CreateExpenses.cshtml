@@ -1,0 +1,135 @@
+@model ExpenseVoyage.DTOs.ItineraryExpenseViewModel
+
+<div class="container">
+
+    <h2>Create Expenses</h2>
+
+    <form asp-action="SaveExpense" method="post" id="expenseForm">
+        <input type="hidden" asp-for="ItineraryId" />
+        <input type="hidden" asp-for="TripId" />
+
+        <div id="itinerary-expense-container">
+            <div class="itinerary-expense-form">
+                <h4>Create Expenses for Day: @Model.Day</h4>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="Expenses[0].Category" class="form-control">
+                        <option value="">Select Category</option>
+                        <option value="Food">Food</option>
+                        <option value="Accommodation">Accommodation</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
+                    </select>
+                    <span class="text-danger error" asp-validation-for="Expenses[0].Category" data-field="Expenses[0].Category"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" name="Expenses[0].Amount" class="form-control" step="0.01" />
+                    <span class="text-danger error" asp-validation-for="Expenses[0].Amount" data-field="Expenses[0].Amount"></span>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="Expenses[0].Date" class="form-control" />
+                    <span class="text-danger error" asp-validation-for="Expenses[0].Date" data-field="Expenses[0].Date"></span>
+                </div>
+                <div class="form-group">
+                    <label>Note</label>
+                    <input type="text" name="Expenses[0].Note" class="form-control" />
+                    <span class="text-danger error" asp-validation-for="Expenses[0].Note" data-field="Expenses[0].Note"></span>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="Expenses[0].Description" class="form-control" />
+                    <span class="text-danger error" asp-validation-for="Expenses[0].Description" data-field="Expenses[0].Description"></span>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" id="add-itinerary-expense" class="btn btn-secondary">Add Another</button>
+        <button type="submit" class="btn btn-success">Save Itineraries and Expenses</button>
+    </form>
+</div>
+
+<script>
+    let index = 1;
+
+    document.getElementById('add-itinerary-expense').addEventListener('click', function () {
+        let container = document.getElementById('itinerary-expense-container');
+        let form = `
+                <div class="itinerary-expense-form">
+                    <h4>Expense</h4>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="Expenses[${index}].Category" class="form-control" >
+                            <option value="">Select Category</option>
+                            <option value="Food">Food</option>
+                            <option value="Accommodation">Accommodation</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
+                        </select>
+                        <span class="text-danger error" asp-validation-for="Expenses[${index}].Category"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" name="Expenses[${index}].Amount" class="form-control" step="0.01"  />
+                        <span class="text-danger error" asp-validation-for="Expenses[${index}].Amount"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="Expenses[${index}].Date" class="form-control"  />
+                        <span class="text-danger error" asp-validation-for="Expenses[${index}].Date"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Note</label>
+                        <input type="text" name="Expenses[${index}].Note" class="form-control"  />
+                        <span class="text-danger error" asp-validation-for="Expenses[${index}].Note"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" name="Expenses[${index}].Description" class="form-control"  />
+                        <span class="text-danger error" asp-validation-for="Expenses[${index}].Description"></span>
+                    </div>
+                </div>
+            `;
+        container.insertAdjacentHTML('beforeend', form);
+        index++;
+    });
+
+    document.getElementById('expenseForm').addEventListener('submit', function (event) {
+        let valid = true;
+
+        // Custom validation for each expense form
+        const expenseForms = document.querySelectorAll('.itinerary-expense-form');
+        expenseForms.forEach((form, i) => {
+            const category = form.querySelector(`select[name="Expenses[${i}].Category"]`);
+            const amount = form.querySelector(`input[name="Expenses[${i}].Amount"]`);
+            const date = form.querySelector(`input[name="Expenses[${i}].Date"]`);
+            const note = form.querySelector(`input[name="Expenses[${i}].Note"]`);
+            const description = form.querySelector(`input[name="Expenses[${i}].Description"]`);
+            if (!category.value || !amount.value || !date.value || !note.value || !description.value) {
+                valid = false;
+                // Optionally add error messages
+                if (!category.value) category.nextElementSibling.textContent = "Category is Required.";
+                if (!amount.value) amount.nextElementSibling.textContent = "Amount is required.";
+                if (!date.value) date.nextElementSibling.textContent = "Date is required.";
+                if (!note.value) note.nextElementSibling.textContent = "Note is required.";
+                if (!description.value) description.nextElementSibling.textContent = "Description is required.";
+            } else {
+                // Clear error messages
+                category.nextElementSibling.textContent = "";
+                amount.nextElementSibling.textContent = "";
+                date.nextElementSibling.textContent = "";
+                note.nextElementSibling.textContent = "";
+                description.nextElementSibling.textContent = "";
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>

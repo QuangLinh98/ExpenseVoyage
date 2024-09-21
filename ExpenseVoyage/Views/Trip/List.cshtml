@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ExpenseVoyage.Models.Trips>
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Total Budget</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trip in Model)
+        {
+            <tr>
+                <td>@trip.User?.Username</td>
+                <td>@trip.Departure</td>
+                <td>@trip.Destination</td>
+                <td>@trip.StartDate</td>
+                <td>@trip.EndDate</td>
+                <td>@trip.TotalBudget</td>
+                <td>
+                    <a class="btn btn-primary" asp-route-idy="@trip.TripId" asp-action="Update">Edit</a> |
+                    @* <a class="btn btn-danger"
+                asp-route-idy="@trip.TripId"
+                asp-action="Delete"
+                onclick="return confirm('Are you sure you want to delete this destination?');">
+                Delete
+                </a><br> *@
+                    <a class="btn btn-primary" asp-route-id="@trip.TripId" asp-action="CreateItn">Create personal itinerary</a>|
+                    <br>
+                    <a class="btn btn-primary" asp-route-id="@trip.TripId" asp-action="Details">Details  </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

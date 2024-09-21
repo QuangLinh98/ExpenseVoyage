@@ -1,0 +1,123 @@
+@model ExpenseVoyage.Models.Itineraries
+
+<h3>Create Owner Itineraries</h3>
+<form id="itineraryForm" action="~/UserTrip/SaveItnExpenses" method="post">
+    <input type="hidden" asp-for="TripId" />
+
+    <div>
+        <label>Day</label>
+        <input type="text" name="Day" class="form-control" placeholder="Day" />
+        <span class="text-danger error" data-field="Day"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Type</label>
+        <select name="Type" class="form-control">
+            <option value="">Select Type</option>
+            <option value="Flight">Flight</option>
+            <option value="Car">Car</option>
+            <option value="Walk">Walk</option>
+            <option value="Motobike">Motobike</option>
+            <option value="Train">Train</option>
+        </select>
+        <span class="text-danger error" data-field="Type"></span>
+    </div>
+
+    <div>
+        <label>Departure</label>
+        <select asp-for="Departure" asp-items="@ViewBag.Destination" class="form-control">
+            <option value="">Select Departure</option>
+        </select>
+        <span class="text-danger error" data-field="Departure"></span>
+    </div>
+
+    <div>
+        <label>Destination</label>
+        <select asp-for="Destination" asp-items="@ViewBag.Destination" class="form-control">
+            <option value="">Select Destination</option>
+        </select>
+        <span class="text-danger error" data-field="Destination"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        <select name="Date" class="form-control">
+            <option value="">Select Date</option>
+            @foreach (var date in ViewBag.Dates)
+            {
+                <option value="@date.Value">@date.Text</option>
+            }
+        </select>
+        <span class="text-danger error" data-field="Date"></span>
+    </div>
+
+    <div>
+        <label>Cost</label>
+        <input type="number" name="Cost" class="form-control" step="0.01" />
+        <span class="text-danger error" data-field="Cost"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Itineraries and Expenses</button>
+</form>
+<script>
+    $(document).ready(function () {
+        $('#itineraryForm').submit(function (event) {
+            var isValid = true;
+
+            // Xóa thông báo lỗi trước khi kiểm tra
+            $('.error').text('');
+
+            // Lấy giá trị các trường
+            var day = $('input[name="Day"]').val();
+            var type = $('select[name="Type"]').val();
+            var departure = $('select[name="Departure"]').val();
+            var destination = $('select[name="Destination"]').val();
+            var date = $('select[name="Date"]').val();
+            var cost = $('input[name="Cost"]').val();
+
+            // Validate Day
+            if (!day) {
+                isValid = false;
+                $('span[data-field="Day"]').text("Day can't be blank.");
+            }
+
+            // Validate Type
+            if (!type) {
+                isValid = false;
+                $('span[data-field="Type"]').text("Type must be selected.");
+            }
+
+            // Validate Departure
+            if (!departure) {
+                isValid = false;
+                $('span[data-field="Departure"]').text("Departure must be selected.");
+            }
+
+            // Validate Destination
+            if (!destination) {
+                isValid = false;
+                $('span[data-field="Destination"]').text("Destination must be selected.");
+            }
+
+            // Validate Date
+            if (!date) {
+                isValid = false;
+                $('span[data-field="Date"]').text("Date must be selected.");
+            }
+
+            // Validate Cost
+            if (!cost) {
+                isValid = false;
+                $('span[data-field="Cost"]').text("Cost can't be blank.");
+            } else if (isNaN(cost) || cost < 0) {
+                isValid = false;
+                $('span[data-field="Cost"]').text("Cost must be a positive number.");
+            }
+
+            // Nếu không hợp lệ, ngăn chặn gửi form
+            if (!isValid) {
+                event.preventDefault(); // Ngăn chặn gửi form
+            }
+        });
+    });
+</script>

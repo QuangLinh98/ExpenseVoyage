@@ -1,0 +1,408 @@
+﻿<!-- /*
+* Template Name: Tour
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+@inject IDistributedCache Cache
+@using Microsoft.Extensions.Caching.Distributed
+@using Newtonsoft.Json
+@using ExpenseVoyage.SessionExtention
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Untree.co">
+	<link rel="shortcut icon" href="favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<meta name="description" content="" />
+	<meta name="keywords" content="bootstrap, bootstrap4" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../../LayoutAdmin/assets/vendors/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="../../LayoutAdmin/assets/vendors/css/vendor.bundle.base.css">
+	<!-- endinject -->
+	<!-- Plugin css for this page -->
+	<!-- End plugin css for this page -->
+	<!-- inject:css -->
+	<!-- endinject -->
+	<!-- Layout styles -->
+	<link rel="stylesheet" href="../../LayoutAdmin/assets/css/style.css">
+	<!-- End layout styles -->
+	<link rel="shortcut icon" href="../../LayoutAdmin/assets/images/favicon.ico" />
+	<link rel="stylesheet" href="~/css/bootstrap.min.css">
+	<link rel="stylesheet" href="~/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
+	<link rel="stylesheet" href="~/fonts/icomoon/style.css">
+	<link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css">
+	<link rel="stylesheet" href="~/css/daterangepicker.css">
+	<link rel="stylesheet" href="~/css/aos.css">
+	<link rel="stylesheet" href="~/css/style.css">
+
+	<title>ExpenseVoyage</title>
+</head>
+
+<body>
+
+
+	<div class="site-mobile-menu site-navbar-target">
+		<div class="site-mobile-menu-header">
+			<div class="site-mobile-menu-close">
+				<span class="icofont-close js-menu-toggle"></span>
+			</div>
+		</div>
+		<div class="site-mobile-menu-body"></div>
+	</div>
+
+	<nav class="site-nav">
+		<div class="container">
+			<div class="site-navigation">
+
+				<a asp-action="Index" asp-controller="Home" class="logo m-0">ExpenseVoyage <span class="text-primary">.</span></a>
+
+				<ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
+					<li><a asp-action="Index" asp-controller="Home">Home</a></li>
+
+					<li><a asp-action="Index" asp-controller="Gallery">Gallery</a></li>
+					<li><a asp-action="Index" asp-controller="DetailsTours">Tours</a></li>
+					<li><a asp-action="Index" asp-controller="About">About</a></li>
+					<li><a asp-action="Index" asp-controller="Contacts">Contact Us</a></li>
+					@if (Context.Session.GetUserId() != null)
+					{
+						<li><a asp-action="Index" asp-controller="UserTrip">Trips</a></li>
+					}
+					<li><a asp-controller="Currencies" asp-action="Index">Currencies</a></li>
+					<li class="nav-item dropdown ms-auto">
+						@if (Context.Session.GetUserId() != null)
+						{
+							var profilePictureUrl = Context.Session.GetString("UserImagePath");
+							var Name = Context.Session.GetString("Username");
+							<a href="#" class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+
+								@if (!string.IsNullOrEmpty(profilePictureUrl))
+								{
+									<img src="~/Uploads/@profilePictureUrl" alt="Profile" class="rounded-circle" width="30" height="30">
+								}
+								else
+								{
+									<img src="~/Upload/UserImages/38fe6047-41cb-43d2-b1eb-23cf55da32a3_AI8.png" alt="Profile Image" class="rounded-circle" width="30" height="30">
+								}
+
+								<span class="ms-2">@Name</span>
+							</a>
+
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+								<li><a asp-controller="Users" asp-action="Profile" class="dropdown-item">Account</a></li>
+
+								<div class="dropdown-divider"></div>
+
+								<li>
+									<a asp-action="Logout" asp-controller="Users" class="dropdown-item">
+										<i class="fa fa-sign-out-alt me-2"></i> Logout
+									</a>
+								</li>
+							</ul>
+						}
+						else
+						{
+							<a asp-controller="Users" asp-action="Login">
+								<i class="fa fa-sign-in-alt me-2"></i> Login
+							</a>
+						}
+
+
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+							<i class="mdi mdi-bell-outline"></i>
+							<span class="count-symbol bg-danger"></span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+							<h6 class="p-3 mb-0">Notifications</h6>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-success">
+										<i class="mdi mdi-calendar"></i>
+									</div>
+								</div>
+								<div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+									<h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
+									<p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today </p>
+								</div>
+							</a>
+
+							<div class="dropdown-divider"></div>
+							<h6 class="p-3 mb-0 text-center">See all notifications</h6>
+						</div>
+					</li>
+				</ul>
+
+				<a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" data-toggle="collapse" data-target="#main-navbar">
+					<span></span>
+				</a>
+
+			</div>
+		</div>
+	</nav>
+
+
+	<div class="hero">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-lg-7">
+					<div class="intro-wrap">
+						<h1 class="mb-5"><span class="d-block">Let's Enjoy Your</span> Trip In <span class="typed-words"></span></h1>
+						<div class="row">
+							<div class="col-12">
+								<form asp-action="DestinationDetails" asp-controller="Home" method="get" class="form-inline mb-3" onsubmit="return confirmSearch()">
+
+									<div class="row mb-2">
+										<div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-4">
+
+											<div class="form-group">
+												<select name="selectedDestination" asp-items="@ViewBag.DestinationList" class="form-control custom-select">
+													<option value="">Destination</option>
+												</select>
+											</div>
+											
+
+
+
+
+										</div>
+										<div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-5">
+											<input type="date" class="form-control" name="daterange">
+										</div>
+										<div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-3">
+											<input type="text" class="form-control" placeholder="# of People">
+										</div>
+
+									</div>
+									<div class="row align-items-center">
+										<div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-4">
+											<input type="submit" class="btn btn-primary btn-block" value="Search">
+										</div>
+										<div class="col-lg-8">
+											<label class="control control--checkbox mt-3">
+												<span class="caption">Save this search</span>
+												<input type="checkbox" checked="checked" />
+												<div class="control__indicator"></div>
+											</label>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="col-lg-5">
+					<div class="slides">
+
+						<img src="~/image/hero-slider-1.jpg" alt="Image" class="img-fluid active">
+						<img src="~/image/hero-slider-2.jpg" alt="Image" class="img-fluid">
+						<img src="~/image/hero-slider-3.jpg" alt="Image" class="img-fluid">
+						<img src="~/image/hero-slider-4.jpg" alt="Image" class="img-fluid">
+						<img src="~/image/hero-slider-5.jpg" alt="Image" class="img-fluid">
+
+						@*   @model ExpenseVoyage.Viewmodels.HomeViewModel
+						@foreach (var image in Model.DestinationImages)
+						{
+						<img src="~/Uploads/@image.ImageUrl" alt="Image" class="img-fluid">
+
+						} *@
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@section Scripts {
+		@{
+
+			await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		}
+	}
+	@RenderSection("Scripts", required: false)
+
+	@RenderBody()
+
+	<div class="py-5 cta-section">
+		<div class="container">
+			<div class="row text-center">
+				<div class="col-md-12">
+					<h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
+					<p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, fugit?</p>
+					<a class="mb-0"><a asp-action="Index" asp-controller="Contacts" class="btn btn-outline-white text-white btn-md font-weight-bold">Get in touch</a></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="site-footer">
+		<div class="inner first">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 col-lg-4">
+						<div class="widget">
+							<h3 class="heading">About Tour</h3>
+							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+						</div>
+						<div class="widget">
+							<ul class="list-unstyled social">
+								<li><a href="#"><span class="icon-twitter"></span></a></li>
+								<li><a href="#"><span class="icon-instagram"></span></a></li>
+								<li><a href="#"><span class="icon-facebook"></span></a></li>
+								<li><a href="#"><span class="icon-linkedin"></span></a></li>
+								<li><a href="#"><span class="icon-dribbble"></span></a></li>
+								<li><a href="#"><span class="icon-pinterest"></span></a></li>
+								<li><a href="#"><span class="icon-apple"></span></a></li>
+								<li><a href="#"><span class="icon-google"></span></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-2 pl-lg-5">
+						<div class="widget">
+							<h3 class="heading">Pages</h3>
+							<ul class="links list-unstyled">
+								<li><a asp-action="Index" asp-controller="Photos">Blog</a></li>
+								<li><a asp-action="Index" asp-controller="About">About</a></li>
+								<li><a asp-action="Index" asp-controller="Contact">Contact</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-2">
+						<div class="widget">
+							<h3 class="heading">Resources</h3>
+							<ul class="links list-unstyled">
+								<li><a asp-action="Index" asp-controller="Photos">Blog</a></li>
+								<li><a asp-action="Index" asp-controller="About">About</a></li>
+								<li><a asp-action="Index" asp-controller="Contact">Contact</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4">
+						<div class="widget">
+							<h3 class="heading">Contact</h3>
+							<ul class="list-unstyled quick-info links">
+								<li class="email"><a href="#">linhnqt1s2303008@fpt.edu.vn</a></li>
+								<li class="phone"><a href="#">+1 222 212 3819</a></li>
+								<li class="address"><a href="">391A Nam Kỳ Khỡi Nghĩa</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="inner dark">
+			<div class="container">
+				<div class="row text-center">
+					<div class="col-md-8 mb-3 mb-md-0 mx-auto">
+						<p>
+							Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co" class="link-highlight">Untree.co</a> <!-- License information: https://untree.co/license/ -->
+						</p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="overlayer"></div>
+	<div class="loader">
+		<div class="spinner-border" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+
+	<script src="../../LayoutAdmin/assets/vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script src="../../LayoutAdmin/assets/js/off-canvas.js"></script>
+	<script src="../../LayoutAdmin/assets/js/hoverable-collapse.js"></script>
+	<script src="../../LayoutAdmin/assets/js/misc.js"></script>
+	<script src="~/js/jquery-3.4.1.min.js"></script>
+	<script src="~/js/popper.min.js"></script>
+	<script src="~/js/bootstrap.min.js"></script>
+	<script src="~/js/owl.carousel.min.js"></script>
+	<script src="~/js/jquery.animateNumber.min.js"></script>
+	<script src="~/js/jquery.waypoints.min.js"></script>
+	<script src="~/js/jquery.fancybox.min.js"></script>
+	<script src="~/js/aos.js"></script>
+	<script src="~/js/moment.min.js"></script>
+	<script src="~/js/daterangepicker.js"></script>
+	<script src="~/js/typed.js"></script>
+	<script>
+		$(function () {
+			var slides = $('.slides'),
+				image = slides.find('img');
+
+			image.each(function (i) {
+				$(this).attr('data-id', i + 1);
+			})
+
+			var typed = new Typed('.typed-words', {
+				strings: ["San Francisco.", " Paris.", " New Zealand.", " Maui.", " London."],
+				typeSpeed: 80,
+				backSpeed: 80,
+				backDelay: 4000,
+				startDelay: 1000,
+				loop: true,
+				showCursor: true,
+				preStringTyped: (arrayPos, self) => {
+					arrayPos++;
+					console.log(arrayPos);
+					$('.slides img').removeClass('active');
+					$('.slides img[data-id="' + arrayPos + '"]').addClass('active');
+				}
+
+			});
+		})
+	</script>
+
+
+	<!-- Modal để hiển thị ảnh lớn -->
+	<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					<img id="modalImage" src="" alt="Image" class="img-fluid" style="width: 100%;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		function showImageInModal(imageUrl) {
+			// Cập nhật đường dẫn ảnh trong modal
+			document.getElementById("modalImage").src = '/Uploads/' + imageUrl;
+		}
+	</script>
+
+	<!-- Owl Carousel CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+
+	<!-- jQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+	<!-- Owl Carousel JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+
+	<script src="~/js/custom.js"></script>
+
+</body>
+
+</html>

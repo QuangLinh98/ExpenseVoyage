@@ -1,0 +1,61 @@
+﻿@model ExpenseVoyage.Models.Itineraries
+
+@{
+    ViewData["Title"] = "Create Itineraries and Expenses";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Create Itineraries and Expenses</h2>
+
+<form asp-action="SaveItnExpenses" method="post">
+    <input type="hidden" asp-for="TripId" />
+
+    <div id="itinerary-expense-container">
+        <div class="itinerary-expense-form">
+            <h4>Itinerary</h4>
+            <div class="form-group">
+                <label>Day</label>
+                <input type="text" name="Day" class="form-control" placeholder="Day" />
+                <span asp-validation-for="Day" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label>Type</label>
+                <input type="text" name="Type" class="form-control" placeholder="Type" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label for="Departure">Departure</label>
+                <select asp-for="Departure" asp-items="@ViewBag.Destination" class="form-control">
+                    <option value="">Select Departure</option>
+                </select>
+                <span asp-validation-for="Departure" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Destination">Departure</label>
+                <select asp-for="Destination" asp-items="@ViewBag.Destination" class="form-control">
+                    <option value="">Select Destination</option>
+                </select>
+                <span asp-validation-for="Destination" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" name="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label>Cost</label>
+                <input type="number" name="Cost" class="form-control" step="0.01" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="add-itinerary-expense" class="btn btn-secondary">Add Another</button>
+    <button type="submit" class="btn btn-primary">Save Itineraries and Expenses</button>
+</form>
