@@ -31,14 +31,8 @@
                 <td>@trip.EndDate</td>
                 <td>@trip.TotalBudget</td>
                 <td>
-                    <a class="btn btn-primary" asp-route-idy="@trip.TripId" asp-action="Update">Edit</a> |
-                    @* <a class="btn btn-danger"
-                asp-route-idy="@trip.TripId"
-                asp-action="Delete"
-                onclick="return confirm('Are you sure you want to delete this destination?');">
-                Delete
-                </a><br> *@
-                    <a class="btn btn-primary" asp-route-id="@trip.TripId" asp-action="CreateItn">Create personal itinerary</a>|
+                    <a class="btn btn-warning" asp-route-idy="@trip.TripId" asp-action="Update">Edit</a> |
+                    <a class="btn btn-success" asp-route-id="@trip.TripId" asp-action="CreateItinerary">Create itinerary</a>|
                     <br>
                     <a class="btn btn-primary" asp-route-id="@trip.TripId" asp-action="Details">Details  </a>
                 </td>

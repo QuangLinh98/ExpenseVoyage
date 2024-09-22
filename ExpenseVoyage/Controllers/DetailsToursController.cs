@@ -13,7 +13,6 @@ namespace ExpenseVoyage.Controllers
         public DetailsToursController(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
-
         }
 
         public IActionResult Index()

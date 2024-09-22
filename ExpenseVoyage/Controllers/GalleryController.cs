@@ -22,7 +22,6 @@ namespace ExpenseVoyage.Controllers
             var viewModel = new HomeViewModel
             {
                 Photos = photos
-                // Add other properties if needed, such as Tours, Destinations, etc.
             };
 
             return View(viewModel);

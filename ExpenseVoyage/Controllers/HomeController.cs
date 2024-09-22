@@ -76,9 +76,6 @@ namespace ExpenseVoyage.Controllers
 			return View(model);
 		}
 
-
-
-
 		public async Task<IActionResult> DetailsTour(int id)
 		{
 			var expenseTour = await _databaseContext.ExpenseTours
@@ -105,10 +102,6 @@ namespace ExpenseVoyage.Controllers
 		{
 			// Fetch the destination based on ID with its related Destinations
 			var destinations = _databaseContext.Destinations.Include(c => c.DestinationImages).FirstOrDefault(d => d.DestinationId == id);
-
-			//var destinationImage = _databaseContext.DestinationImages
-			//                     .Include(d => d.Destinations)
-			//                     .FirstOrDefault(d => d.Id == id);
 
 			if (destinations == null)
 			{

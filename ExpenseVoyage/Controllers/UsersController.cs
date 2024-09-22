@@ -58,8 +58,6 @@ namespace ExpenseVoyage.Controllers
 		
 		public async Task<IActionResult> Profile()
 		{
-			//Users user = null;
-
 			// Lấy email từ session
 			string email = HttpContext.Session.GetString("UserEmail");
 			if (string.IsNullOrEmpty(email))

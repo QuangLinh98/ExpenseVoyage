@@ -17,11 +17,7 @@ namespace ExpenseVoyage.Controllers
         public IActionResult Index()
 
         {
-
-
-            var currencies = _databaseContext.Currencies.ToList(); // Lấy danh sách các loại tiền tệ
-           
-
+            var currencies = _databaseContext.Currencies.ToList(); // Lấy danh sách các loại tiền tệ        
             var viewModel = new HomeViewModel
             {
                 Currencies = currencies
